@@ -1,6 +1,5 @@
 package ru.virarnd.stepcomposition.domain.usecases
 
-import ru.virarnd.stepcomposition.domain.entity.GameSettings
 import ru.virarnd.stepcomposition.domain.entity.Question
 import ru.virarnd.stepcomposition.domain.repository.GameRepository
 

@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import java.lang.RuntimeException
-import ru.virarnd.stepcomposition.R
 import ru.virarnd.stepcomposition.databinding.FragmentWelcomeBinding
 
 class WelcomeFragment : Fragment() {
