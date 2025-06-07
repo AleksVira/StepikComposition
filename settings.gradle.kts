@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "stepShopList"
+rootProject.name = "stepComposition"
 include(":app")
  

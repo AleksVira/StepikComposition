@@ -10,10 +10,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.StepShopList"
+        android:windowSoftInputMode="adjustResize"
+        android:theme="@style/Theme.Composition"
         tools:targetApi="31">
-        <activity android:name=".presentation.ShopItemActivity"
-            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true">

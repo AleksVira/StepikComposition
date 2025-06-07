@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    namespace = "ru.virarnd.stepshoplist"
+    namespace = "ru.virarnd.stepcomposition"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "ru.virarnd.stepshoplist"
+        applicationId = "ru.virarnd.stepcomposition"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -29,6 +29,10 @@ android {
     }
     kotlinOptions {
         jvmTarget = "11"
+    }
+
+    buildFeatures {
+        viewBinding = true
     }
 }
 
