@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import java.lang.RuntimeException
 import ru.virarnd.stepcomposition.databinding.FragmentGameFinishedBinding
 import ru.virarnd.stepcomposition.domain.entity.GameResult
 import ru.virarnd.stepcomposition.presentation.GameFragment.Companion.GAME_FRAGMENT_NAME
@@ -17,12 +16,12 @@ class GameFinishedFragment : Fragment() {
 
     companion object {
 
-        private const val KEY_RESULT = "gameResult"
+        private const val KEY_GAME_RESULT = "gameResult"
 
-        fun newInstance(gameResult: GameResult) : GameFinishedFragment {
+        fun newInstance(gameResult: GameResult): GameFinishedFragment {
             return GameFinishedFragment().apply {
                 arguments = Bundle().apply {
-                    putSerializable(KEY_RESULT, gameResult)
+                    putParcelable(KEY_GAME_RESULT, gameResult)
                 }
             }
         }
@@ -40,8 +39,7 @@ class GameFinishedFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentGameFinishedBinding.inflate(inflater, container, false)
         return binding.root
@@ -49,6 +47,11 @@ class GameFinishedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.buttonRetry.setOnClickListener {
+            retryGame()
+        }
+
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 retryGame()
@@ -64,9 +67,9 @@ class GameFinishedFragment : Fragment() {
 
     private fun parseArgs() {
         gameResult = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            requireArguments().getSerializable(KEY_RESULT, GameResult::class.java)
+            requireArguments().getParcelable(KEY_GAME_RESULT, GameResult::class.java)
         } else {
-            arguments?.getSerializable(KEY_RESULT) as GameResult
+            arguments?.getParcelable<GameResult>(KEY_GAME_RESULT) as GameResult
         } ?: throw RuntimeException("GameResult is null")
     }
 
