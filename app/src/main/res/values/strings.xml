@@ -18,7 +18,7 @@
     <string name="test_level">Тестовый</string>
     <string name="game_over">Game Over</string>
     <string name="score_answers">Ваш счет: %s</string>
-    <string name="score_percentage">Процент правильных ответов: %s</string>
+    <string name="score_percentage">Процент правильных ответов: %.2f</string>
     <string name="retry">Попробовать снова</string>
     <string name="right_answers">Правильных ответов %s из %s необходимых</string>
     <string name="required_percentage">Необходимый процент правильных ответов: %s</string>

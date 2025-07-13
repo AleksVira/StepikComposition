@@ -2,9 +2,10 @@ package ru.virarnd.stepcomposition.presentation
 
 import android.app.Application
 import android.os.CountDownTimer
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import java.util.Locale
 import ru.virarnd.stepcomposition.R
 import ru.virarnd.stepcomposition.data.GameRepositoryImpl
 import ru.virarnd.stepcomposition.domain.entity.GameResult
@@ -14,18 +15,17 @@ import ru.virarnd.stepcomposition.domain.entity.Question
 import ru.virarnd.stepcomposition.domain.usecases.GenerateQuestionUseCase
 import ru.virarnd.stepcomposition.domain.usecases.GetGameSettingsUseCase
 
-class GameViewModel(application: Application) : AndroidViewModel(application) {
+class GameViewModel(
+    private val application: Application,
+    private val level: Level
+) : ViewModel() {
 
     companion object {
         private const val MILLIS_IN_SECOND = 1000L
         private const val SECOND_IN_MINUTE = 60L
     }
 
-    private val context = application
-
     private lateinit var gameSettings: GameSettings
-    private lateinit var level: Level
-
     private val repository = GameRepositoryImpl
 
     private val generateQuestionUseCase = GenerateQuestionUseCase(repository)
@@ -75,14 +75,18 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         timer?.cancel()
     }
 
-    fun startGame(level: Level) {
-        getGameSettings(level)
-        startTimer()
-        generateNextQuestion()
+    init {
+        startGame()
     }
 
-    fun getGameSettings(level: Level) {
-        this.level = level
+    private fun startGame() {
+        getGameSettings()
+        startTimer()
+        generateNextQuestion()
+        updateProgress()
+    }
+
+    fun getGameSettings() {
         this.gameSettings = getGameSettingsUseCase(level)
         _minPercent.value = gameSettings.minPercentOfRightAnswers
     }
@@ -111,7 +115,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         val seconds = millisUntilFinished / MILLIS_IN_SECOND
         val minutes = seconds / SECOND_IN_MINUTE
         val leftSeconds = seconds % SECOND_IN_MINUTE
-        return String.format("%02d:%02d", minutes, leftSeconds)
+        return String.format(Locale.getDefault(), "%02d:%02d", minutes, leftSeconds)
     }
 
     fun chooseAnswer(number: Int) {
@@ -124,7 +128,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         val percent = calculatePercentOfRightAnswers()
         _percentOfRightAnswers.value = percent
         _progressAnswers.value = String.format(
-            context.resources.getString(R.string.progress_answers),
+            application.resources.getString(R.string.progress_answers),
             countOfRightAnswers.toString(),
             gameSettings.minCountOfRightAnswers.toString()
         )
@@ -133,6 +137,9 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun calculatePercentOfRightAnswers(): Int {
+        if (countOfRightAnswers == 0) {
+            return 0
+        }
         return (countOfRightAnswers.toDouble() / countOfQuestions * 100).toInt()
     }
 
